@@ -1,26 +1,127 @@
+
 <?php
   include('session.php');
   if(!isset($_SESSION['login_user'])){
-    header("location: index.php"); // Redirecting To Home Page
+    header("location: index.php"); // Redireciona para página de login
   }
 ?>
 
-
 <!DOCTYPE html>
 <html>
-  
   <head>
     <title>Página Inicial</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="Estilo.css" >
-    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
-    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css" href="/DataTables/datatables.min.css">
+    <script language="javascript" type="text/javascript" src="/jquery/jquery.js"></script>
+    <script src="/DataTables/Buttons-1.6.5/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="/DataTables/datatables.min.js"></script>
     <script>
     $(document).ready(function() {
-      $('#myTable').DataTable();
-    });
-    </script>
+      
+    // Adiciona filtro para cada coluna
+    $('#myTable1 thead tr').clone(true).appendTo( '#myTable1 thead' );
+    $('#myTable1 thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Buscar" />' );
+        //$(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+    var table1 = $('#myTable1').DataTable( {
+      "pageLength": 20,
+        "language": {
+            "order": [[ 3, "desc" ]],
+            "search": "Busca Geral:",
+            "paginate": {"previous": "Anterior", "next": "Próxima"},
+            "lengthMenu": "Exibindo _MENU_ registros por página",
+            "zeroRecords": "Nenhum registro encontrado",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "Não há registros a serem exibidos",
+            "infoFiltered": "(filtrado do total de _MAX_ registros)" },
+        //dom: 'Bfrtip',
+        dom: "<'row'<'col-md-6'B><'col-md-6'f>><'row'<'col-md-12't>><'row'<'col-md-6'i><'col-md-6'p>>",
+        lengthChange: false,
+        buttons: [ 
+          {extend: 'csv', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'excel', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'pdf', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'print', className: 'btn-success', exportOptions: {columns: ':visible'}, text:'Imprimir'},
+          {extend: 'colvis', className: 'btn-success', text:'Colunas Vísiveis'}],
+          columnDefs: [ {
+            targets: 0,
+            visible: false
+        } ],
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
     
+    // Adiciona filtro para cada coluna
+    $('#myTable2 thead tr').clone(true).appendTo( '#myTable2 thead' );
+    $('#myTable2 thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Buscar" />' );
+        //$(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+    var table2 = $('#myTable2').DataTable( {
+      "pageLength": 20,
+        "language": {
+            "order": [[ 3, "desc" ]],
+            "search": "Busca Geral:",
+            "paginate": {"previous": "Anterior", "next": "Próxima"},
+            "lengthMenu": "Exibindo _MENU_ registros por página",
+            "zeroRecords": "Nenhum registro encontrado",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "Não há registros a serem exibidos",
+            "infoFiltered": "(filtrado do total de _MAX_ registros)" },
+        //dom: 'Bfrtip',
+        dom: "<'row'<'col-md-6'B><'col-md-6'f>><'row'<'col-md-12't>><'row'<'col-md-6'i><'col-md-6'p>>",
+        lengthChange: false,
+        buttons: [ 
+          {extend: 'csv', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'excel', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'pdf', className: 'btn-success', exportOptions: {columns: ':visible'}},
+          {extend: 'print', className: 'btn-success', exportOptions: {columns: ':visible'}, text:'Imprimir'},
+          {extend: 'colvis', className: 'btn-success', text:'Colunas Vísiveis'}],
+          columnDefs: [ {
+            targets: 0,
+            visible: false
+        } ],
+        orderCellsTop: true,
+        fixedHeader: true
+    } );
+
+    
+    } );
+    </script>
+    <style>
+   .btn-success {
+      width: 100px;
+      padding: 5px;
+      font-size: 12px;
+   }
+   
+   thead input {
+        width: 60%;
+        height:20px;
+        color:black;
+    }
+</style>
   </head>
   
   <body>
@@ -33,27 +134,30 @@
       <button class="tablinks" onclick="openTab(event, 'Acessos')" id="defaultOpen">Acessos</button>
       <button class="tablinks" onclick="openTab(event, 'Usuarios')">Usuários</button>
       <button class="tablinks" onclick="openTab(event, 'Sistema')">Web</button>
+      <button class="tablinks" onclick="openTab(event, 'Ambientes')">Ambientes</button>
     </div>
     
     <h2>Sistema de Gerenciamento de Controle de Acesso</h2>
-  
+<!---------------------------------------------------------------------------------------->  
     <div id="Acessos" class="tabcontent">
       <button2 id="cadastro"><a href="cadastro.php">Cadastrar Novo Usuário</a></button2>            
       <button2 id="atualizar"><a href="profile.php">Atualizar</a></button2>  
       <br><br>
-      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Procurar ID">
-      <br><br>
-      <table id="myTable">
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Horário</th>
-          <th>Área</th>
-          <th>Sala</th>
-          <th>Acesso</th>
-          <th>Porta</th>
-          <th>Cadastrar?</th>
-        </tr>
+      
+      <table id="myTable1" class="display nowrap">
+        <thead>
+          <tr style="height:40px">
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Horário</th>
+            <th>Área</th>
+            <th>Sala</th>
+            <th>Acesso</th>
+            <th>Porta</th>
+            <th>Cadastrar?</th>
+          </tr>
+        </thead>
+        <tbody>
         <?php
           $conn = mysqli_connect("localhost", "debian", "temppwd", "Registro");
           if ($conn->connect_error) {
@@ -92,16 +196,22 @@
           } else { echo "0 results"; }
           $conn->close();
           ?>
+          </tbody>
+          <tfoot>
+        </tfoot>
       </table>
     </div>
     
+<!---------------------------------------------------------------------------------------->
     <div id="Usuarios" class="tabcontent">
       <button2 id="cadastro"><a href="cadastro.php">Cadastrar Novo Usuário</a></button2>            
       <button2 id="relatorio"><a href="relatorios.php">Relatórios</a></button2>
       <button2 id="atualizar"><a href="profile.php">Atualizar</a></button2>  
       <br><br>
-      <table>
-        <tr>
+      
+      <table id="myTable2" class="display" >
+        <thead>
+        <tr style="height:40px">
           <th>ID</th>
           <th>Nome</th>
           <th>Email</th>
@@ -113,6 +223,8 @@
           <th>Vigência</th>
           <th>Editar/Excluir</th>
         </tr>
+        </thead>
+        <tbody>
         <?php
           $conn = mysqli_connect("localhost", "debian", "temppwd", "Registro");
           if ($conn->connect_error) {
@@ -145,20 +257,27 @@
           } else { echo "0 results"; }
           $conn->close();
           ?>
+          </tbody>
+          <tfoot>
+        </tfoot>
       </table>
     </div>
-    
+
+<!---------------------------------------------------------------------------------------->
     <div id="Sistema" class="tabcontent">
       <button2 id="cadastroweb"><a href="cadastroweb.php">Novo Usuário Web</a></button2>
       <br><br>
-      <table>
-        <tr>
+      <table id="myTable3" class="display nowrap">
+        <thead>
+          <tr style="height:40px">
           <th>ID</th>
           <th>Usuário</th>
           <th>Senha</th>
           <th>Vigência</th>
           <th>Editar</th>
         </tr>
+        </thead>
+        <tbody>
         <?php
           $conn = mysqli_connect("localhost", "debian", "temppwd", "Registro");
           if ($conn->connect_error) {
@@ -183,53 +302,37 @@
           } else { echo "0 results"; }
           $conn->close();
           ?>
+          </tbody>
+          <tfoot>
+        </tfoot>
       </table>
     </div>
     
-    <script>
-      function myFunction() {
-        // Declare variables
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("myTable");
-        tr = table.getElementsByTagName("tr");
+    <div id="Ambientes" class="tabcontent">
       
-        // Loop through all table rows, and hide those who don't match the search query
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
-            }
-          }
-        }
-      }
-      function openTab(evt, cityName) {
-        // Declare all variables
+    </div>
+    
+    <script>
+      function openTab(evt, tabName) {
+        
         var i, tabcontent, tablinks;
       
-        // Get all elements with class="tabcontent" and hide them
         tabcontent = document.getElementsByClassName("tabcontent");
         for (i = 0; i < tabcontent.length; i++) {
           tabcontent[i].style.display = "none";
         }
       
-        // Get all elements with class="tablinks" and remove the class "active"
         tablinks = document.getElementsByClassName("tablinks");
         for (i = 0; i < tablinks.length; i++) {
           tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-      
-        // Show the current tab, and add an "active" class to the link that opened the tab
-        document.getElementById(cityName).style.display = "block";
+
+        document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
       }
-    // Get the element with id="defaultOpen" and click on it
+
     document.getElementById("defaultOpen").click();
+    
     </script>
   </body>
 </html>
